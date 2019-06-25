@@ -1,0 +1,23 @@
+@page "/"
+@inject IJSRuntime JsRuntime;
+
+<span class="h-25">
+    Welcome to ethor .Net Core Web Application.
+</span>
+<span class="badge badge-success">
+    UserProfile: @BasicProfile
+</span>
+<eThorWebApp.Client.Pages.ethor.Index>
+</eThorWebApp.Client.Pages.ethor.Index>
+
+@functions {
+
+    string BasicProfile { get; set; }
+    protected override async Task OnInitAsync()
+    {
+
+        BasicProfile = await JsRuntime.InvokeAsync<string>("getGoogleUser");
+
+        StateHasChanged();
+    }
+}

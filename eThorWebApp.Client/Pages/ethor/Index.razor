@@ -1,0 +1,57 @@
+@page "/ethor"
+@using eThorWebApp.Shared.Models
+@inject HttpClient Http
+
+@if (Entities == null)
+{
+    <p><em>Loading Ethor listings...</em></p>
+}
+else
+{
+    <BlazorTable class="table" IsSmall="true" IsResponsive="true" IsHovarable="true">
+        <TableHead >
+            <tr>
+                <th scope="col">Id</th>
+                <th>Name</th>
+                <th>HardProperty</th>
+            </tr>
+        </TableHead>
+        <tbody>
+            @foreach (var entity in Entities)
+            {
+                <tr scope="row">
+                    <td>@entity.Id</td>
+                    <td>@entity.Name</td>
+                    <td>
+                        <Dropdown>
+                            <DropdownToggle Color="Color.Primary">Select...</DropdownToggle>
+                            <DropdownMenu>
+                                @foreach (var property in @entity.HardPropertyList)
+                                {
+                                    <DropdownItem Href="#">@property</DropdownItem>
+                                }
+                            </DropdownMenu>
+                        </Dropdown>
+                    </td>
+                    <td>
+                        <ActionLinkButton Action="update" Route="/ethor" RouteValue="@entity.Id.ToString()"></ActionLinkButton>
+                        <ActionLinkButton Action="remove" Route="/ethor" RouteValue="@entity.Id.ToString()"></ActionLinkButton>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </BlazorTable>
+
+}
+
+@functions {
+
+    [Parameter]
+    private eThorTestEntity[] Entities { get; set; } = null;
+
+    protected override async Task OnInitAsync()
+    {
+        Entities = await Http.GetJsonAsync<eThorTestEntity[]>("api/eThorTestEntities");
+    }
+
+}
