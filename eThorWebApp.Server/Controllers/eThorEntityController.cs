@@ -30,36 +30,32 @@ namespace eThorWebApp.Server.Controllers
             }
         }
 
-        // GET: api/eThorTestEntity
         [HttpGet]
         public async Task<IEnumerable<eThorTestEntity>> Get()
         {
             return await ethorService.GetAll();
         }
 
-        // GET: api/eThorTestEntity/5
         [HttpGet("{id}")]
-        public async Task<string> Get(int id)
+        public async Task<eThorTestEntity> Get(int id)
         {
             var eThorTestEntity = await ethorService.Get(id);
-            return JsonConvert.SerializeObject(eThorTestEntity);
+            return eThorTestEntity;
         }
 
-        // PUT: api/eThorTestEntity/5
-        [HttpPut("{id}")]
-        public async Task Put(eThorTestEntity eThorTestEntity)
+        [HttpPut]
+        public async Task Put(object eThorTestEntity)
         {
-            await ethorService.Update(eThorTestEntity);
+            eThorTestEntity o = JsonConvert.DeserializeObject<eThorTestEntity>(eThorTestEntity.ToString());
+            await ethorService.Update(o);
         }
 
-        // POST: api/eThorTestEntity
         [HttpPost]
         public async Task Post(eThorTestEntity eThorTestEntity)
         {
             await ethorService.Add(eThorTestEntity);
         }
 
-        // DELETE: api/eThorTestEntity/5
         [HttpDelete("{id}")]
         public async Task Delete(int Id)
         {

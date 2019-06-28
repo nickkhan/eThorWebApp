@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
 
 namespace eThorWebApp.Shared.Models
 {
@@ -21,5 +19,10 @@ namespace eThorWebApp.Shared.Models
         [Column]
         [Required]
         public List<string> HardPropertyList { get; set; } = new List<string>();
+
+        public override string ToString()
+        {
+            return string.Join(System.Environment.NewLine, HardPropertyList.ToArray());
+        }
     }
 }

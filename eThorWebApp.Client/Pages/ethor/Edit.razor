@@ -2,17 +2,18 @@
 @using eThorWebApp.Shared.Models
 @inject HttpClient Http
 @inject IJSRuntime JSRuntime
+@inject IUriHelper UriHelper
 
-@if (Entity == null)
+@if (!IsModalOpen)
 {
-    <BlazorButton ButtonType="ButtonType.Link" bind-value="@entityId" OnClick="@onEditEntity">
+    <BlazorButton ButtonType="ButtonType.Link" Color="Color.Link" bind-value="@entityId" OnClick="@onEditEntity">
       <i class="zmdi zmdi-edit"></i>
     </BlazorButton>
 
 }
 else
 {
-    <Modal data-bind="entityId" IsOpen="@IsModalOpen" IsCentered="true">
+    <Modal data-bind="@entityId" IsOpen="@IsModalOpen" IsCentered="true">
         <ModalHeader>
             <Breadcrumb>
             <BreadcrumbItem><a href="#">Ehor</a></BreadcrumbItem>
@@ -20,20 +21,22 @@ else
         </Breadcrumb>
         </ModalHeader>
         <ModalBody>
-            <BlazorForm>
+            <BlazorForm OnSubmit="@onSaveEntity">
                 <FormGroup>
                     <BlazorLabel For="Id">Id</BlazorLabel>
-                    <BlazorInput Id="Id" InputType="InputType.Text" Value="@Entity.Id.ToString()" />
+                    <BlazorInput Id="Id" IsReadonly="true" InputType="InputType.Text" Value="@Entity.Id.ToString()" />
 
                     <BlazorLabel For="Name">Name</BlazorLabel>
                     <BlazorInput Id="Name" InputType="InputType.Text" Value="@Entity.Name" />
 
+                    <BlazorLabel For="HardPropertyList">HardPropertyList</BlazorLabel>
+                    <BlazorInput Id="HardPropertyList" InputType="InputType.TextArea" Value="@printList()"></BlazorInput>
                 </FormGroup>
             </BlazorForm>
         </ModalBody>
         <ModalFooter>
-            <BlazorButton Color="Color.Secondary" data-dismiss="modal">Close</BlazorButton>
-            <BlazorButton Color="Color.Primary" OnClick="@onSaveEntity">Save Changes</BlazorButton>
+            <BlazorButton Color="Color.Secondary" onclick="@onClose" data-dismiss="modal">Close</BlazorButton>
+            <BlazorButton Color="Color.Primary" ButtonType="ButtonType.Submit">Save Changes</BlazorButton>
         </ModalFooter>
     </Modal>
 }
@@ -43,30 +46,42 @@ else
     private eThorTestEntity Entity { get; set; } = null;
 
     [Parameter]
-    public int? entityId { get; set; } = null;
+    public int entityId { get; set; }
 
     bool IsModalOpen { get; set; }
     private void onEditEntity(UIMouseEventArgs e)
     {
         if(Entity!=null)
         {
-            IsModalOpen = !IsModalOpen;   
+            IsModalOpen = !IsModalOpen;
         }
-        
+
     }
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitAsync()
     {
-        if(entityId != null)
-        {
-            Entity = await Http.GetJsonAsync<eThorTestEntity>("api/eThorEntity/" + entityId.ToString());
-            StateHasChanged();
-        }
+        Entity = await Http.GetJsonAsync<eThorTestEntity>("api/eThorEntity/" + entityId);
+
     }
 
-    void onSaveEntity(UIMouseEventArgs e)
+    public void onClose()
     {
-        StateHasChanged();
+        IsModalOpen = false;
+        UriHelper.NavigateTo("/ethor");
     }
 
+    public async void onSaveEntity()
+    {
+        string json = JsonConvert.SerializeObject(Entity);
+
+        await Http.PutJsonAsync("api/eThorEntity/", json);
+        IsModalOpen = false;
+        UriHelper.NavigateTo("/ethor");
+
+    }
+
+    public string printList()
+    {
+        return string.Join(System.Environment.NewLine, Entity.HardPropertyList.ToArray());
+    }
 }

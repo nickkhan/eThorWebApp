@@ -1,41 +1,52 @@
-@page "/ethor/details"
+@page "/ethor/details/{entityId}"
 @using eThorWebApp.Shared.Models
 @inject HttpClient Http
+@inject IUriHelper UriHelper
 
-
-@if (Entity == null)
+@if(Entity!=null)
 {
-<BlazorButton Color="Color.Primary" ButtonType="ButtonType.Link" bind-value="@entityId" OnClick="@onViewDetails">
-    <i class="zmdi zmdi-assignment"></i>
-</BlazorButton>
+    <Modal data-bind="entityId" IsOpen="@IsModalOpen" IsCentered="true">
+        <ModalHeader>
+            <Breadcrumb>
+                <BreadcrumbItem><a href="#">Ehor</a></BreadcrumbItem>
+                <BreadcrumbItem IsActive="true">Edit</BreadcrumbItem>
+            </Breadcrumb>
+        </ModalHeader>
+        <ModalBody>
+            <BlazorTable class="table" IsSmall="true" IsHovarable="true">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">HardProperty</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Entity.Id</td>
+                        <td>@Entity.Name</td>
+                        <td>
+                            <blockquote class="blockquote">
+                                <ol>
+                                    @foreach (var property in Entity.HardPropertyList)
+                                    {
+                                        <li>@property</li>
+                                    }
+                                </ol>
+                            </blockquote>
+                        </td>
+                    </tr>
+                </tbody>
+            </BlazorTable>
+        </ModalBody>
+        <ModalFooter>
+            <BlazorButton Color="Color.Link" OnClick="@goBack" data-dismiss="modal">Back to Index</BlazorButton>
+        </ModalFooter>
+    </Modal>
 }
-else
-{
-<Modal data-bind="entityId" IsOpen="@IsModalOpen" IsCentered="true">
-    <ModalHeader>
-        <Breadcrumb>
-            <BreadcrumbItem><a href="#">Ehor</a></BreadcrumbItem>
-            <BreadcrumbItem IsActive="true">Edit</BreadcrumbItem>
-        </Breadcrumb>
-    </ModalHeader>
-    <ModalBody>
-        <BlazorForm>
-            <FormGroup>
-                <BlazorLabel For="Id">Id</BlazorLabel>
-                <BlazorInput Id="Id" InputType="InputType.Text" Value="@Entity.Id.ToString()" />
 
-                <BlazorLabel For="Name">Name</BlazorLabel>
-                <BlazorInput Id="Name" InputType="InputType.Text" Value="@Entity.Name" />
 
-            </FormGroup>
-        </BlazorForm>
-    </ModalBody>
-    <ModalFooter>
-        <BlazorButton Color="Color.Secondary" data-dismiss="modal">Close</BlazorButton>
-        <BlazorButton Color="Color.Primary" OnClick="@onSaveEntity">Save Changes</BlazorButton>
-    </ModalFooter>
-</Modal>
-}
 
 @functions {
 
@@ -47,7 +58,7 @@ else
     bool IsModalOpen { get; set; }
     private async Task onViewDetails(UIMouseEventArgs e)
     {
-        if(entityId != null)
+        if (entityId != null)
         {
             Entity = await Http.GetJsonAsync<eThorTestEntity>("api/eThorEntity/" + entityId.ToString());
             IsModalOpen = !IsModalOpen;
@@ -56,9 +67,8 @@ else
         StateHasChanged();
     }
 
-    void onSaveEntity(UIMouseEventArgs e)
+    void goBack()
     {
-        StateHasChanged();
+        UriHelper.NavigateTo("user/signin", true);
     }
-
 }

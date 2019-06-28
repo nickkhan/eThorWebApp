@@ -1,3 +1,4 @@
+using eThorWebApp.Shared.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +11,8 @@ namespace eThorWebApp.Client
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<eThorTestEntity>();
+            services.AddScoped<UserInfo>();
             services.AddAuthorizationCore();
             services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
 

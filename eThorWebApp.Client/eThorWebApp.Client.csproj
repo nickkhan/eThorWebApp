@@ -47,7 +47,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Pages\ethor\Index.razor">
+    <Content Update="Pages\**\*.razor">
+      <Generator>MSBuild:RazorGenerateComponentDeclarationDesignTime</Generator>
+    </Content>
+    <Content Update="Shared\**\*.razor">
       <Generator>MSBuild:RazorGenerateComponentDeclarationDesignTime</Generator>
     </Content>
   </ItemGroup>

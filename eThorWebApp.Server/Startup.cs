@@ -1,21 +1,21 @@
+using System.Linq;
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
 using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Linq;
-using System;
 using eThorWebApp.Shared.Interfaces;
 using eThorWebApp.Shared.Services;
 using eThorWebApp.Shared.Data;
 using eThorWebApp.Shared.Models;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
 
 namespace eThorWebApp.Server
 {
@@ -32,6 +32,7 @@ namespace eThorWebApp.Server
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             var windsorContainer = new WindsorContainer();
+
             services.AddSingleton<IethorService, ethorService>();
             services.AddDbContext<eThorTestEntityContext>(opt => opt.UseInMemoryDatabase("eThorTestEntityDb"));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -47,9 +48,10 @@ namespace eThorWebApp.Server
                     return context.Response.WriteAsync("<script>window.close();</script>");
                 };
             });
-            services.AddMvc();
+            services.AddMvc().AddNewtonsoftJson();
             services.AddResponseCompression(opts =>
             {
+                opts.Providers.Add<GzipCompressionProvider>();
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
             });

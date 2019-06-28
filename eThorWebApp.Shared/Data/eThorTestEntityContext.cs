@@ -21,8 +21,8 @@ namespace eThorWebApp.Shared.Data
         {
             var splitStringConverter =
                 new ValueConverter<List<string>, string>(
-                    v => string.Join(",", v),
-                    v => v.Split(new[] { ',' }).ToList());
+                    v => string.Join(System.Environment.NewLine, v),
+                    v => v.Split(System.Environment.NewLine.ToCharArray()).ToList());
 
             modelBuilder.Entity<eThorTestEntity>()
             .Property(nameof(eThorTestEntity.HardPropertyList))

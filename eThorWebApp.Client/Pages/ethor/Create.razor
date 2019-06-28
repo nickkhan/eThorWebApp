@@ -2,35 +2,58 @@
 @using eThorWebApp.Shared.Models
 @inject HttpClient Http
 
-<Breadcrumb>
-    <BreadcrumbItem><a href="#">Ehor</a></BreadcrumbItem>
-    <BreadcrumbItem IsActive="true">Create</BreadcrumbItem>
-</Breadcrumb>
 
-<h4>eThorTestEntity</h4>
-<hr />
+    <Modal data-bind="entityId" IsOpen="@IsModalOpen" IsCentered="true">
+        <ModalHeader>
+            <Breadcrumb>
+                <BreadcrumbItem><a href="#">Ehor</a></BreadcrumbItem>
+                <BreadcrumbItem IsActive="true">Edit</BreadcrumbItem>
+            </Breadcrumb>
+        </ModalHeader>
+        <ModalBody>
+            <BlazorForm>
+                <FormGroup>
+                    <BlazorLabel For="Id">Id</BlazorLabel>
+                    <BlazorInput Id="Id" InputType="InputType.Text" Value="@Entity.Id.ToString()" />
 
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="eThorTestEntity.Name" class="control-label"></label>
-                <input asp-for="eThorTestEntity.Name" class="form-control" />
-                <span asp-validation-for="eThorTestEntity.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+                    <BlazorLabel For="Name">Name</BlazorLabel>
+                    <BlazorInput Id="Name" InputType="InputType.Text" Value="@Entity.Name" />
 
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
+                    <BlazorLabel For="HardProperty"></BlazorLabel>
+                    <BlazorInput Id="HardPropertyList" InputType="InputType.TextArea">
 
+                    </BlazorInput>
+                </FormGroup>
+            </BlazorForm>
+        </ModalBody>
+        <ModalFooter>
+            <BlazorButton Color="Color.Secondary" data-dismiss="modal">Close</BlazorButton>
+            <BlazorButton Color="Color.Primary" OnClick="@onSaveEntity">Save Changes</BlazorButton>
+        </ModalFooter>
+    </Modal>
 
 @functions {
+
+    private eThorTestEntity Entity { get; set; } = null;
+
+    [Parameter]
+    public int? entityId { get; set; } = null;
+
+    bool IsModalOpen { get; set; }
+    private async Task onViewDetails(UIMouseEventArgs e)
+    {
+        if (entityId != null)
+        {
+            Entity = await Http.GetJsonAsync<eThorTestEntity>("api/eThorEntity/" + entityId.ToString());
+            IsModalOpen = !IsModalOpen;
+        }
+
+        StateHasChanged();
+    }
+
+    void onSaveEntity(UIMouseEventArgs e)
+    {
+        StateHasChanged();
+    }
 
 }

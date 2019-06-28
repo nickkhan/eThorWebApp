@@ -2,13 +2,9 @@
 @using eThorWebApp.Shared.Models
 @inject HttpClient Http
  
-<Breadcrumb>
-    <BreadcrumbItem><a href="#">Ehor</a></BreadcrumbItem>
-    <BreadcrumbItem IsActive="true">Delete</BreadcrumbItem>
-</Breadcrumb>
 @if (Entity == null)
 {
-<BlazorButton ButtonType="ButtonType.Link" bind-value="@entityId" OnClick="@onDeleteEntity">
+<BlazorButton ButtonType="ButtonType.Link"  Color="Color.Link" bind-value="@entityId" OnClick="@onDeleteEntity">
     <i class="zmdi zmdi-delete"></i>
 </BlazorButton>
 
