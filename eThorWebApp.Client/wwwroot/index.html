@@ -3,47 +3,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="google-signin-client_id" content="354113905172-lbkcvqvareshr1p3kgug4ev27eh72k8q.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
-    <script>
-
-        function onSignIn(googleUser) {
-            window.getGoogleUser = function () {
-                return googleUser;
-            }
-
-            window.JsFunctions = {
-                getBasicProfile: function () {
-                    var profile = googleUser.getBasicProfile();
-                    window.googleUser = googleUser;
-                    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-                    console.log('Name: ' + profile.getName());
-                    console.log('Image URL: ' + profile.getImageUrl());
-                    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-
-                    return googleUser.getBasicProfile();
-                }
-            };
-        };
-
-
-
-        function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-                console.log('User signed out.');
-            });
-        }
-
-    </script>
+    <script src="lib/jquery/dist/jquery.min.js"></script>
     <title>eThorWebApp</title>
     <base href="/" />
     <link href="css/site.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="g-signin2" data-onsuccess="onSignIn">
-    </div>
-    <app>Loading...</app>
+
+    <app id="ethorWebApp">Loading...</app>
 
     <script src="_framework/blazor.webassembly.js"></script>
 </body>

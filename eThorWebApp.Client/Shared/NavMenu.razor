@@ -1,0 +1,30 @@
+<div class="row">
+    <BlazorNav IsList="true" Alignment="Alignment.Left">
+        <NavItem>
+            <NavbarBrand>
+                <Card CardType="CardType.Card">
+                    <Card CardType="CardType.Header">
+                        <div class="col-sm-4">
+                            <span class="username">@Name</span>
+                        </div>
+                        <div class="col-sm-8">
+                            <a class="sign-out" href="user/signout">Sign out</a>
+                        </div>
+
+                    </Card>
+                </Card>
+            </NavbarBrand>
+        </NavItem>
+        <NavItem>
+            <BlazorNavLink IsActive="true" href="/">Home</BlazorNavLink>
+        </NavItem>
+        <NavItem>
+            <BlazorNavLink href="/ethor">Ethor</BlazorNavLink>
+        </NavItem>
+    </BlazorNav>
+</div>
+
+@functions{
+    [CascadingParameter]
+    public string Name { get; set; }
+}

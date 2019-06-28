@@ -1,0 +1,13 @@
+<div class="user-info">
+    <AuthorizeView>
+        <Authorizing>
+            <text>...</text>
+        </Authorizing>
+        <Authorized>
+            <NavMenu Name="@context.User.Identity.Name"></NavMenu>
+        </Authorized>
+        <NotAuthorized>
+            <a class="btn btn-link" href="user/signin">Sign in with Google</a>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>

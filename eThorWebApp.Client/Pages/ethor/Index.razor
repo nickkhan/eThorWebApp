@@ -1,6 +1,12 @@
 @page "/ethor"
 @using eThorWebApp.Shared.Models
+@using Microsoft.AspNetCore.Authorization
 @inject HttpClient Http
+@attribute [Authorize]
+
+<Breadcrumb>
+    <BreadcrumbItem IsActive="true">Ethor</BreadcrumbItem>
+</Breadcrumb>
 
 @if (Entities == null)
 {
@@ -8,34 +14,30 @@
 }
 else
 {
-    <BlazorTable class="table" IsSmall="true" IsResponsive="true" IsHovarable="true">
-        <TableHead >
+    <BlazorTable class="table" IsSmall="true" IsHovarable="true">
+        <thead>
             <tr>
                 <th scope="col">Id</th>
-                <th>Name</th>
-                <th>HardProperty</th>
+                <th scope="col">Name</th>
+                <th scope="col">HardProperty</th>
+                <th scope="col">Actions</th>
             </tr>
-        </TableHead>
+        </thead>
         <tbody>
             @foreach (var entity in Entities)
             {
-                <tr scope="row">
+                <tr>
                     <td>@entity.Id</td>
                     <td>@entity.Name</td>
                     <td>
-                        <Dropdown>
-                            <DropdownToggle Color="Color.Primary">Select...</DropdownToggle>
-                            <DropdownMenu>
-                                @foreach (var property in @entity.HardPropertyList)
-                                {
-                                    <DropdownItem Href="#">@property</DropdownItem>
-                                }
-                            </DropdownMenu>
-                        </Dropdown>
+                        <blockquote class="blockquote">
+                            @string.Join(",", entity.HardPropertyList)
+                        </blockquote>
                     </td>
                     <td>
-                        <ActionLinkButton Action="update" Route="/ethor" RouteValue="@entity.Id.ToString()"></ActionLinkButton>
-                        <ActionLinkButton Action="remove" Route="/ethor" RouteValue="@entity.Id.ToString()"></ActionLinkButton>
+                        @{
+                            <eThorWebApp.Client.Pages.ethor.Edit entityId="@entity.Id"></eThorWebApp.Client.Pages.ethor.Edit>
+                        }
                     </td>
                 </tr>
             }
@@ -46,12 +48,11 @@ else
 
 @functions {
 
-    [Parameter]
     private eThorTestEntity[] Entities { get; set; } = null;
 
     protected override async Task OnInitAsync()
     {
-        Entities = await Http.GetJsonAsync<eThorTestEntity[]>("api/eThorTestEntities");
+        Entities = await Http.GetJsonAsync<eThorTestEntity[]>("api/eThorEntity");
     }
 
 }

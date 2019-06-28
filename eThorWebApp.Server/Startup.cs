@@ -16,6 +16,8 @@ using eThorWebApp.Shared.Data;
 using eThorWebApp.Shared.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace eThorWebApp.Server
 {
@@ -34,19 +36,19 @@ namespace eThorWebApp.Server
             var windsorContainer = new WindsorContainer();
             services.AddSingleton<IethorService, ethorService>();
             services.AddDbContext<eThorTestEntityContext>(opt => opt.UseInMemoryDatabase("eThorTestEntityDb"));
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-           .AddOpenIdConnect(
-            authenticationScheme: "Google",
-            displayName: "Google",
-            options =>
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+           .AddCookie()
+           .AddGoogle(options =>
             {
-                options.Authority = "https://accounts.google.com/o/oauth2/auth";
-                options.MetadataAddress = "https://accounts.google.com/.well-known/openid-configuration";
-                options.ClientId = "354113905172-lbkcvqvareshr1p3kgug4ev27eh72k8q.apps.googleusercontent.com";
-                options.ClientSecret = "KMMNmREmVy0jwZajf3bWolIW";
+                options.ClientId = "996931337200-ptgdnpmn4tcf8sf7e5fuaetdnenhvtgs.apps.googleusercontent.com";
+                options.ClientSecret = "GzdaBo_AVYuwY5hk2RQRvu8d";
                 options.SaveTokens = true;
+                options.Events.OnRemoteFailure = (context) =>
+                {
+                    context.HandleResponse();
+                    return context.Response.WriteAsync("<script>window.close();</script>");
+                };
             });
-            services.AddAuthorizationCore();
             services.AddMvc();
             services.AddResponseCompression(opts =>
             {
@@ -86,6 +88,7 @@ namespace eThorWebApp.Server
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapFallbackToClientSideBlazor<Client.Startup>("index.html");
             });
@@ -99,8 +102,8 @@ namespace eThorWebApp.Server
 
             };
             entity1.HardPropertyList = new List<string>() {
-                "list of text 1 ",
-                "list of text 2 "
+                "If the Easter Bunny and the Tooth Fairy had babies would they take your teeth and leave chocolate for you?",
+                "There was no ice cream in the freezer, nor did they have money to go to the store."
             };
 
             _context.Add(entity1);
@@ -112,12 +115,29 @@ namespace eThorWebApp.Server
                 Name = "entity 2"
             };
             entity2.HardPropertyList = new List<string>() {
-                "list of text 3 ",
-                "list of text 4 "
+                "The old apple revels in its authority.",
+                "Writing a list of random sentences is harder than I initially thought it would be.",
+                "I am counting my calories, yet I really want dessert.",
+                "I am never at home on Sundays."
+
             };
             _context.Add(entity2);
             _context.SaveChanges();
 
+
+            var entity3 = new eThorTestEntity()
+            {
+                Name = "entity 3"
+            };
+            entity3.HardPropertyList = new List<string>() {
+                "The clock within this blog and the clock on my laptop are 1 hour different from each other.",
+                "The mysterious diary records the voice.",
+                "Malls are great places to shop; I can find everything I need under one roof.",
+                "I was very proud of my nickname throughout high school but today- I couldn’t be any different to what my nickname was."
+
+            };
+            _context.Add(entity3);
+            _context.SaveChanges();
         }
     }
 

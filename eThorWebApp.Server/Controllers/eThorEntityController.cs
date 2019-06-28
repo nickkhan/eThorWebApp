@@ -14,10 +14,10 @@ namespace eThorWebApp.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class eThorTestEntitiesController : ControllerBase
+    public class eThorEntityController : ControllerBase
     {
         private IWindsorContainer Container { get; set; }
-        public eThorTestEntitiesController(IWindsorContainer container)
+        public eThorEntityController(IWindsorContainer container)
         {
             Container = container;
         }
@@ -30,14 +30,14 @@ namespace eThorWebApp.Server.Controllers
             }
         }
 
-        // GET: api/eThorTestEntities
+        // GET: api/eThorTestEntity
         [HttpGet]
         public async Task<IEnumerable<eThorTestEntity>> GeteThorTestEntites()
         {
             return await ethorService.GetAll();
         }
 
-        // GET: api/eThorTestEntities/5
+        // GET: api/eThorTestEntity/5
         [HttpGet("{id}")]
         public async Task<string> GeteThorTestEntity(int id)
         {
@@ -45,21 +45,21 @@ namespace eThorWebApp.Server.Controllers
             return JsonConvert.SerializeObject(eThorTestEntity);
         }
 
-        // PUT: api/eThorTestEntities/5
+        // PUT: api/eThorTestEntity/5
         [HttpPut("{id}")]
         public async Task PuteThorTestEntity(eThorTestEntity eThorTestEntity)
         {
             await ethorService.Update(eThorTestEntity);
         }
 
-        // POST: api/eThorTestEntities
+        // POST: api/eThorTestEntity
         [HttpPost]
         public async Task PosteThorTestEntity(eThorTestEntity eThorTestEntity)
         {
             await ethorService.Add(eThorTestEntity);
         }
 
-        // DELETE: api/eThorTestEntities/5
+        // DELETE: api/eThorTestEntity/5
         [HttpDelete("{id}")]
         public async Task DeleteeThorTestEntity(int Id)
         {

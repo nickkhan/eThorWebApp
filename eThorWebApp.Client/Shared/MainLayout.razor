@@ -1,9 +1,16 @@
 ﻿@inherits LayoutComponentBase
 @using Microsoft.AspNetCore.Components
+@using eThorWebApp.Shared.Models
+@inject HttpClient Http
 
+    <div class="navbar">
+        <Login></Login> 
+    </div>
 <div class="container-fluid">
 
     <div class="content px-4">
         @Body
     </div>
 </div>
+
+

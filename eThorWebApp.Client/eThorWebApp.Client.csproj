@@ -16,18 +16,34 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- extends watching group to include *.razor files -->
+    <Watch Include="eThorWebApp.Server\**\*.razor" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
     <None Include="wwwroot\index.html" />
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="BlazorStrap" Version="1.0.0-preview6-12" />
+    <PackageReference Include="BlazorStrap" Version="1.0.0-preview6-13" />
+    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.1" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.0.0-preview6.19307.2" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="3.0.0-preview6.19307.2" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.1.0" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.0.48" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\eThorWebApp.Shared\eThorWebApp.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
+      <HintPath>..\..\..\..\..\..\PROGRAM FILES\DOTNET\packs\Microsoft.AspNetCore.App.Ref\3.0.0-preview6.19307.2\ref\netcoreapp3.0\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

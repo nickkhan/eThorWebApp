@@ -2,7 +2,10 @@
 @using eThorWebApp.Shared.Models
 @inject HttpClient Http
 
-
+<Breadcrumb>
+    <BreadcrumbItem><a href="#">Ehor</a></BreadcrumbItem>
+    <BreadcrumbItem IsActive="true">Create</BreadcrumbItem>
+</Breadcrumb>
 
 <h4>eThorTestEntity</h4>
 <hr />
@@ -28,6 +31,6 @@
 </div>
 
 
-@code {
+@functions {
 
 }
