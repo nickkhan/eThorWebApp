@@ -11,6 +11,10 @@
       "provider": "unpkg",
       "library": "jquery@3.4.1",
       "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "library": "material-design-iconic-font@2.2.0",
+      "destination": "wwwroot/lib/material-design-iconic-font/"
     }
   ]
 }

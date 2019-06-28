@@ -1,27 +1,33 @@
 <div class="row">
-    <BlazorNav IsList="true" Alignment="Alignment.Left">
-        <NavItem>
-            <NavbarBrand>
-                <Card CardType="CardType.Card">
-                    <Card CardType="CardType.Header">
-                        <div class="col-sm-4">
-                            <span class="username">@Name</span>
-                        </div>
-                        <div class="col-sm-8">
-                            <a class="sign-out" href="user/signout">Sign out</a>
-                        </div>
+    <div class="col-md-12">
+        <Navbar Color="Color.Light" IsDark="false" IsExpand="true">
+            <BlazorNav IsList="true" IsVertical="true" IsFill="true" Alignment="Alignment.Left">
+                <NavItem>
+                    <NavbarBrand>
+                        <Card CardType="CardType.Card">
+                            <Card CardType="CardType.Header">
+                                <div class="col-sm-4">
+                                    <span class="username">@Name</span>
+                                </div>
+                                <div class="col-sm-8">
+                                    <a class="sign-out" href="user/signout">Sign out</a>
+                                </div>
 
-                    </Card>
-                </Card>
-            </NavbarBrand>
-        </NavItem>
-        <NavItem>
-            <BlazorNavLink IsActive="true" href="/">Home</BlazorNavLink>
-        </NavItem>
-        <NavItem>
-            <BlazorNavLink href="/ethor">Ethor</BlazorNavLink>
-        </NavItem>
-    </BlazorNav>
+                            </Card>
+                        </Card>
+                    </NavbarBrand>
+                </NavItem>
+                <NavItem>
+                    <BlazorNavLink IsActive="true" href="/">Home</BlazorNavLink>
+                </NavItem>
+                <NavItem>
+                    <BlazorNavLink href="/ethor">Ethor</BlazorNavLink>
+                </NavItem>
+            </BlazorNav>
+        </Navbar>
+    </div>
+    
+
 </div>
 
 @functions{

@@ -32,14 +32,14 @@ namespace eThorWebApp.Server.Controllers
 
         // GET: api/eThorTestEntity
         [HttpGet]
-        public async Task<IEnumerable<eThorTestEntity>> GeteThorTestEntites()
+        public async Task<IEnumerable<eThorTestEntity>> Get()
         {
             return await ethorService.GetAll();
         }
 
         // GET: api/eThorTestEntity/5
         [HttpGet("{id}")]
-        public async Task<string> GeteThorTestEntity(int id)
+        public async Task<string> Get(int id)
         {
             var eThorTestEntity = await ethorService.Get(id);
             return JsonConvert.SerializeObject(eThorTestEntity);
@@ -47,21 +47,21 @@ namespace eThorWebApp.Server.Controllers
 
         // PUT: api/eThorTestEntity/5
         [HttpPut("{id}")]
-        public async Task PuteThorTestEntity(eThorTestEntity eThorTestEntity)
+        public async Task Put(eThorTestEntity eThorTestEntity)
         {
             await ethorService.Update(eThorTestEntity);
         }
 
         // POST: api/eThorTestEntity
         [HttpPost]
-        public async Task PosteThorTestEntity(eThorTestEntity eThorTestEntity)
+        public async Task Post(eThorTestEntity eThorTestEntity)
         {
             await ethorService.Add(eThorTestEntity);
         }
 
         // DELETE: api/eThorTestEntity/5
         [HttpDelete("{id}")]
-        public async Task DeleteeThorTestEntity(int Id)
+        public async Task Delete(int Id)
         {
             await ethorService.Delete(Id);
         }

@@ -1,11 +1,14 @@
 @page "/ethor/edit/{entityId}"
 @using eThorWebApp.Shared.Models
 @inject HttpClient Http
-@inject  IJSRuntime JSRuntime
+@inject IJSRuntime JSRuntime
 
 @if (Entity == null)
 {
-    <BlazorButton Color="Color.Primary" ButtonType="ButtonType.Link" bind-value="@entityId" OnClick="@onEditEntity">Edit</BlazorButton>
+    <BlazorButton ButtonType="ButtonType.Link" bind-value="@entityId" OnClick="@onEditEntity">
+      <i class="zmdi zmdi-edit"></i>
+    </BlazorButton>
+
 }
 else
 {
@@ -42,25 +45,23 @@ else
     [Parameter]
     public int? entityId { get; set; } = null;
 
-
-
-    //protected override async Task OnInitAsync()
-    //{
-    //    Entity = await Http.GetJsonAsync<eThorTestEntity>("api/eThorEntity" + entityId.ToString());
-    //}
-
     bool IsModalOpen { get; set; }
-    private async Task onEditEntity(UIMouseEventArgs e)
+    private void onEditEntity(UIMouseEventArgs e)
     {
-        if(entityId == null)
+        if(Entity!=null)
         {
-            return;
+            IsModalOpen = !IsModalOpen;   
         }
-        Console.WriteLine("entityId is set to " + entityId.ToString());
+        
+    }
 
-        Entity = await Http.GetJsonAsync<eThorTestEntity>("api/eThorEntity/" + entityId.ToString());
-        IsModalOpen = !IsModalOpen;
-        StateHasChanged();
+    protected override async Task OnParametersSetAsync()
+    {
+        if(entityId != null)
+        {
+            Entity = await Http.GetJsonAsync<eThorTestEntity>("api/eThorEntity/" + entityId.ToString());
+            StateHasChanged();
+        }
     }
 
     void onSaveEntity(UIMouseEventArgs e)
@@ -68,16 +69,4 @@ else
         StateHasChanged();
     }
 
-    //int count = 0;
-    //protected override void OnAfterRender()
-    //{
-    //    count++;
-    //    Console.WriteLine($"OnAfterRender execution count: {count}");
-    //}
-
-    protected override async Task OnAfterRenderAsync()
-    {
-        // Initialize JavaScript library
-        //await JSRuntime.InvokeAsync<bool>("JsFunctions.getBasicProfile", "Modal has been initialized successfully.");
-    }
 }

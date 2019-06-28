@@ -1,41 +1,61 @@
 @page "/ethor/delete"
 @using eThorWebApp.Shared.Models
 @inject HttpClient Http
-
+ 
 <Breadcrumb>
     <BreadcrumbItem><a href="#">Ehor</a></BreadcrumbItem>
     <BreadcrumbItem IsActive="true">Delete</BreadcrumbItem>
 </Breadcrumb>
+@if (Entity == null)
+{
+<BlazorButton ButtonType="ButtonType.Link" bind-value="@entityId" OnClick="@onDeleteEntity">
+    <i class="zmdi zmdi-delete"></i>
+</BlazorButton>
 
-
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>eThorTestEntity</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-
-        </dt>
-        <dd class="col-sm-10">
-
-        </dd>
-    </dl>
-
-    <form method="post">
-        <input type="hidden" asp-for="eThorTestEntity.Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
-    </form>
-</div>
-
+}
+else
+{
+<Modal data-bind="entityId" IsOpen="@IsModalOpen" IsCentered="true">
+    <ModalHeader>
+        <Breadcrumb>
+            <BreadcrumbItem><a href="#">Ehor</a></BreadcrumbItem>
+            <BreadcrumbItem IsActive="true">Delete</BreadcrumbItem>
+        </Breadcrumb>
+    </ModalHeader>
+    <ModalBody>
+        Are you sure you want to delete ?
+    </ModalBody>
+    <ModalFooter>
+        <BlazorButton Color="Color.Secondary" data-dismiss="modal">Cancel</BlazorButton>
+        <BlazorButton Color="Color.Danger" OnClick="@onDeleteEntity">Delete</BlazorButton>
+    </ModalFooter>
+</Modal>
+}
 
 @functions {
 
-    [Parameter]
-    private eThorTestEntity[] Entities { get; set; } = null;
+    private eThorTestEntity Entity { get; set; } = null;
 
-    protected override async Task OnInitAsync()
+    [Parameter]
+    public int? entityId { get; set; } = null;
+
+    bool IsModalOpen { get; set; }
+    private void onDeleteEntity(UIMouseEventArgs e)
     {
-        Entities = await Http.GetJsonAsync<eThorTestEntity[]>("api/eThorTestEntities/");
+        if(Entity!=null)
+        {
+            IsModalOpen = !IsModalOpen;
+        }
+
     }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if(entityId != null)
+        {
+            Entity = await Http.GetJsonAsync<eThorTestEntity>("api/eThorEntity/" + entityId.ToString());
+            StateHasChanged();
+        }
+    }
+
 }

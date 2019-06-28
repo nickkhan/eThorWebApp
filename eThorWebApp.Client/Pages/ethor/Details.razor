@@ -2,12 +2,63 @@
 @using eThorWebApp.Shared.Models
 @inject HttpClient Http
 
-<Breadcrumb>
-    <BreadcrumbItem><a href="#">Ehor</a></BreadcrumbItem>
-    <BreadcrumbItem IsActive="true">Details</BreadcrumbItem>
-</Breadcrumb>
 
+@if (Entity == null)
+{
+<BlazorButton Color="Color.Primary" ButtonType="ButtonType.Link" bind-value="@entityId" OnClick="@onViewDetails">
+    <i class="zmdi zmdi-assignment"></i>
+</BlazorButton>
+}
+else
+{
+<Modal data-bind="entityId" IsOpen="@IsModalOpen" IsCentered="true">
+    <ModalHeader>
+        <Breadcrumb>
+            <BreadcrumbItem><a href="#">Ehor</a></BreadcrumbItem>
+            <BreadcrumbItem IsActive="true">Edit</BreadcrumbItem>
+        </Breadcrumb>
+    </ModalHeader>
+    <ModalBody>
+        <BlazorForm>
+            <FormGroup>
+                <BlazorLabel For="Id">Id</BlazorLabel>
+                <BlazorInput Id="Id" InputType="InputType.Text" Value="@Entity.Id.ToString()" />
+
+                <BlazorLabel For="Name">Name</BlazorLabel>
+                <BlazorInput Id="Name" InputType="InputType.Text" Value="@Entity.Name" />
+
+            </FormGroup>
+        </BlazorForm>
+    </ModalBody>
+    <ModalFooter>
+        <BlazorButton Color="Color.Secondary" data-dismiss="modal">Close</BlazorButton>
+        <BlazorButton Color="Color.Primary" OnClick="@onSaveEntity">Save Changes</BlazorButton>
+    </ModalFooter>
+</Modal>
+}
 
 @functions {
+
+    private eThorTestEntity Entity { get; set; } = null;
+
+    [Parameter]
+    public int? entityId { get; set; } = null;
+
+    bool IsModalOpen { get; set; }
+    private async Task onViewDetails(UIMouseEventArgs e)
+    {
+        if(entityId != null)
+        {
+            Entity = await Http.GetJsonAsync<eThorTestEntity>("api/eThorEntity/" + entityId.ToString());
+            IsModalOpen = !IsModalOpen;
+        }
+
+        StateHasChanged();
+    }
+
+    void onSaveEntity(UIMouseEventArgs e)
+    {
+        StateHasChanged();
+    }
 
 }

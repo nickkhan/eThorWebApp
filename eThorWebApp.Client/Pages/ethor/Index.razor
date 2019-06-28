@@ -31,12 +31,23 @@ else
                     <td>@entity.Name</td>
                     <td>
                         <blockquote class="blockquote">
-                            @string.Join(",", entity.HardPropertyList)
+                            <ol>
+                              @foreach (var property in entity.HardPropertyList)
+                              {
+                                <li>@property</li>
+                              }
+                            </ol>
                         </blockquote>
                     </td>
                     <td>
                         @{
                             <eThorWebApp.Client.Pages.ethor.Edit entityId="@entity.Id"></eThorWebApp.Client.Pages.ethor.Edit>
+                        }
+                        @{
+                            <eThorWebApp.Client.Pages.ethor.Delete entityId="@entity.Id"></eThorWebApp.Client.Pages.ethor.Delete>
+                        }
+                        @{
+                            <eThorWebApp.Client.Pages.ethor.Details entityId="@entity.Id"></eThorWebApp.Client.Pages.ethor.Details>
                         }
                     </td>
                 </tr>
